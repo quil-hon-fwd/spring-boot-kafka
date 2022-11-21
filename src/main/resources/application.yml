@@ -2,13 +2,28 @@ server:
   port: 9000
 spring:
   kafka:
+    properties:
+      security:
+        protocol: SASL_SSL
+      sasl:
+        mechanism: PLAIN
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='admin' password='admin-secret';
+      ssl:
+        truststore:
+          location: /tmp/kafka.appSA.truststore.jks
+          password: confluent
     consumer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: 
+        - localhost:10092
+        - localhost:10091
       group-id: group_id
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers:
+        - localhost:10092
+        - localhost:10091
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
